@@ -1,0 +1,40 @@
+{% include 'admin/head.html' %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-header">
+                    Inicio de sesión
+                </div>
+                <div class="card-body">
+                    <form action="/admin/login" method="post">
+
+                        <div class="mb-3">
+                          <label for="" class="form-label">Usuario</label>
+                          <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="Escriba aquí">
+  
+                          <label for="" class="form-label">Contraseña</label>
+                          <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="Escriba aquí">
+                          <br>
+                          <button type="submit" class="btn btn-success">Enviar</button>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="card-footer text-muted">
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+        </div>
+    
+        
+    </div>
+</div>
+
+
+
+{% include 'admin/footer.html' %}

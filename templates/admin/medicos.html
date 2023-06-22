@@ -1,45 +1,68 @@
 {% include 'admin/head.html' %}
 
-<div class="p-5 mb-4 bg-light rounded-3">
-    <div class="container-fluid py-5">
-      <h1 class="display-5 fw-bold">Médicos</h1>
-    </div>
-  </div>
+<div class="container">
 
-
-  <!-- Información Doctor -->
     <div class="row">
         <div class="col-4">
-            <div class="card text-start">
-              <img class="card-img-top" src="https://www.cleversalud.cl/wp-content/uploads/Posso-Moar-Ana-CleverSalud-Gineco-Obstetra.jpg" alt="Title">
-              <div class="card-body">
-                <h4 class="card-title">Title</h4>
-                <p class="card-text">Body</p>
-              </div>
+          <div class="card">
+            <div class="card-header">
+                Datos del Médico
             </div>
+            <div class="card-body">
+                <form action="/admin/login" method="post">
+
+                    <div class="mb-3">
+                      <label for="" class="form-label">Nombre</label>
+                      <input type="medico_nombre" class="form-control" name="" id="" aria-describedby="helpId" placeholder="Escriba aquí">
+
+                      <label for="" class="form-label">Especialidad</label>
+                      <input type="medico_especialidad" class="form-control" name="" id="" aria-describedby="helpId" placeholder="Escriba aquí">
+                      <br>
+
+                      <label for="" class="form-label">URL Descarga</label>
+                      <input type="medico_imagen class="form-control" name="" id="" aria-describedby="helpId" placeholder="Escriba aquí">
+                      <br>
+                      <button type="submit" class="btn btn-success">Crear Médico</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>          
         </div>
-        <div class="col-4">
-            <div class="card text-start">
-                <img class="card-img-top" src="https://www.cleversalud.cl/wp-content/uploads/Posso-Moar-Ana-CleverSalud-Gineco-Obstetra.jpg" alt="Title">
-                <div class="card-body">
-                  <h4 class="card-title">Title</h4>
-                  <p class="card-text">Body</p>
-                </div>
-              </div>
+        <div class="col-8"> 
+          <div class="table-responsive">
+            <table class="table table-primary">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Médico</th>
+                  <th scope="col">Especialidad</th>
+                  <th scope="col">Imagen</th>
+                  <th scope="col">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="">
+                  <td scope="row">R1C1</td>
+                  <td>R1C2</td>
+                  <td>R1C3</td>
+                  <td>R1C2</td>                
+                </tr>
+                <tr class="">
+                  <td scope="row">Item</td>
+                  <td>Item</td>
+                  <td>Item</td>
+                  <td>Item</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
         </div>
-        <div class="col-4">
-            <div class="card text-start">
-                <img class="card-img-top" src="https://www.cleversalud.cl/wp-content/uploads/Posso-Moar-Ana-CleverSalud-Gineco-Obstetra.jpg" alt="Title">
-                <div class="card-body">
-                  <h4 class="card-title">Title</h4>
-                  <p class="card-text">Body</p>
-                </div>
-              </div>
-        </div>        
+  
     </div>
+</div>
 
-
-    
 
 
 {% include 'admin/footer.html' %}

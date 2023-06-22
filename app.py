@@ -2,16 +2,10 @@
 
 #importar
 from flask import Flask
-from flask import render_template
+from flask import render_template, request, redirect
 
 #creamos la app. Si ejecutamos este archivo, sera 'main', pero desde otro archivo será 'holamundo.py'
 app = Flask(__name__)
-
-
-#************** Instanciamos ********#
-if __name__ == '__main__':
-    app.run(debug=True)
-
 
 #************** sitio ***************#
 
@@ -40,3 +34,16 @@ def admin_medicos():
 @app.route('/admin/nosotros')
 def admin_nosotros():
     return render_template('/admin/nosotros.html')
+
+@app.route('/admin/login')
+def admin_login():
+    return render_template('/admin/login.html')
+
+@app.route('/admin/medicos/guardar',methods=['POST']) #ruta para el request del form de medicos
+def admin_request_guardar():
+    print(request.form('medico_nombre'))
+    return render_template('/admin/login.html')
+
+#************** Instanciamos ********#
+if __name__ == '__main__':
+    app.run(debug=True)
