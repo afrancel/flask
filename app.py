@@ -1,11 +1,19 @@
-#************** base ***************#
-
-#importar
-from flask import Flask
-from flask import render_template, request, redirect
+#************** IMPORTAMOS ***************#
+from flask import Flask #importamos la libreria
+from flask import render_template #importamos el lector de plantillas
+from flask import request, redirect #importamos para hacer solicitudes y redirecciones
+from flaskext.mysql import MySQL #importamos para gestión de BD (Esta es una extensión)
 
 #creamos la app. Si ejecutamos este archivo, sera 'main', pero desde otro archivo será 'holamundo.py'
 app = Flask(__name__)
+
+#configuramos la base de datos
+mysql = MySQL()
+app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'Site2022Lock'
+app.config['MYSQL_DATABASE_DB'] = 'flaskdb'
+mysql.init_app(app)
 
 #************** sitio ***************#
 
@@ -29,6 +37,8 @@ def admin_index(): #definimos una función llamada index
 
 @app.route('/admin/medicos')
 def admin_medicos():
+    conexion = mysql.connect()
+    print(conexion)
     return render_template('/admin/medicos.html')
 
 @app.route('/admin/nosotros')
@@ -40,9 +50,28 @@ def admin_login():
     return render_template('/admin/login.html')
 
 @app.route('/admin/medicos/guardar',methods=['POST']) #ruta para el request del form de medicos
-def admin_request_guardar():
-    print(request.form('medico_nombre'))
-    return render_template('/admin/login.html')
+def admin_medicos_guardar():
+
+    #creo estas variables, que tomarán la info del form de la página e indica que campo del form tomará
+    _nombre = request.form['medico_nombre_form']
+    _url_linkedin = request.form['medico_url_form']
+    _imagen = request.files['medico_imagen_form']
+
+    #creo esta variable, para insertar los datos anteriores en la bd
+    #01 instrucción SQL con ayuda de workbench
+    sql = "INSERT INTO medicos (id, nombre, url, imagen) VALUES (NULL,%s,%s,%s);"
+    values = (_nombre,_url_linkedin,_imagen.filename)
+    
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute(sql,values)
+    conexion.commit()
+
+    print(_nombre,sep='')
+    print(_url_linkedin,sep='')
+    print(_imagen)
+
+    return redirect('/admin/medicos')
 
 #************** Instanciamos ********#
 if __name__ == '__main__':

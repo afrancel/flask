@@ -9,18 +9,17 @@
                 Datos del Médico
             </div>
             <div class="card-body">
-                <form action="/admin/login" method="post">
+                <form action="/admin/medicos/guardar" method="POST" enctype="multipart/form-data">
 
                     <div class="mb-3">
-                      <label for="" class="form-label">Nombre</label>
-                      <input type="medico_nombre" class="form-control" name="" id="" aria-describedby="helpId" placeholder="Escriba aquí">
+                      <label for="medico_nombre_form" class="form-label">Nombre</label>
+                      <input type="text" class="form-control" name="medico_nombre_form" id="" aria-describedby="" placeholder="Escriba aquí">
 
-                      <label for="" class="form-label">Especialidad</label>
-                      <input type="medico_especialidad" class="form-control" name="" id="" aria-describedby="helpId" placeholder="Escriba aquí">
-                      <br>
+                      <label for="medico_url_form" class="form-label">URL Linkedin</label>
+                      <input type="text" class="form-control" name="medico_url_form" id="" aria-describedby="" placeholder="Escriba aquí">
 
-                      <label for="" class="form-label">URL Descarga</label>
-                      <input type="medico_imagen class="form-control" name="" id="" aria-describedby="helpId" placeholder="Escriba aquí">
+                      <label for="medico_imagen_form" class="form-label">Imagen perfil</label>
+                      <input type="file" class="form-control" name="medico_imagen_form" id="" aria-describedby="" placeholder="Escriba aquí">
                       <br>
                       <button type="submit" class="btn btn-success">Crear Médico</button>
                     </div>
@@ -43,16 +42,18 @@
               </thead>
               <tbody>
                 <tr class="">
-                  <td scope="row">R1C1</td>
-                  <td>R1C2</td>
-                  <td>R1C3</td>
-                  <td>R1C2</td>                
+                  <td>01</td>
+                  <td>Yessica Acero</td>
+                  <td>Ginecóloga</td>
+                  <td>Imagen.jpg</td>
+                  <td>Modificar</td>
                 </tr>
                 <tr class="">
                   <td scope="row">Item</td>
                   <td>Item</td>
                   <td>Item</td>
                   <td>Item</td>
+                  <td>Item</td>                  
                 </tr>
               </tbody>
             </table>
