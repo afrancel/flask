@@ -4,6 +4,9 @@ from flask import render_template #importamos el lector de plantillas
 from flask import request, redirect #importamos para hacer solicitudes y redirecciones
 from flaskext.mysql import MySQL #importamos para gestión de BD (Esta es una extensión)
 from datetime import datetime #para generar variables de tiempo y trabajar con carga de archivos
+import os #necesario para complementar la carga de imagenes
+
+from flask import send_from_directory #para obtener informacion de la imagen
 
 #creamos la app. Si ejecutamos este archivo, sera 'main', pero desde otro archivo será 'holamundo.py'
 app = Flask(__name__)
@@ -21,6 +24,11 @@ mysql.init_app(app)
 @app.route('/') #método para indicar la ruta, se ejecutara cuando llamemos la raíz
 def index(): #definimos una función llamada index
     return render_template('sitio/index.html') #indicamos la ruta
+
+@app.route('/imagenes/<imagen>')
+def cargar_imagen(imagen):
+    print(imagen)
+    return send_from_directory(os.path.join('templates/imagenes/'),imagen)
 
 @app.route('/medicos')
 def medicos():
@@ -64,19 +72,19 @@ def admin_medicos_guardar():
     _url_linkedin = request.form['medico_url_form']
     _imagen = request.files['medico_imagen_form']
 
-    #creo esta variable, para insertar los datos anteriores en la bd
-    #01 instrucción SQL con ayuda de workbench
-    sql = "INSERT INTO medicos (id, nombre, url, imagen) VALUES (NULL,%s,%s,%s);"
-    values = (_nombre,_url_linkedin,_imagen.filename)
-
     #configuración carga y muestra de imagenes
     #Para esto --> importamos from datetime import datetime
     fecha_carga = datetime.now()
-    fecha_actual = fecha_carga.strftime('%Y_%H_%M_%S')#--> para mostrar, traer los datos en un formato
+    fecha_actual = fecha_carga.strftime('%Y%H%M%S')#--> para mostrar, traer los datos en un formato
 
-    if _imagen.filename!= '':
-        nuevoNombre = fecha_actual + ' ' + _imagen.filename
-        _imagen.save("templates/imagenes/" + nuevoNombre)
+    if _imagen.filename!= "":
+        nuevoNombre = fecha_actual+"_"+ _imagen.filename
+        _imagen.save("templates/imagenes/"+nuevoNombre)    
+
+    #creo esta variable, para insertar los datos anteriores en la bd
+    #01 instrucción SQL con ayuda de workbench
+    sql = "INSERT INTO medicos (id, nombre, url, imagen) VALUES (NULL,%s,%s,%s);"
+    values = (_nombre,_url_linkedin,nuevoNombre) #--> la variable de la imagen cambió
 
     conexion = mysql.connect()
     cursor = conexion.cursor()
