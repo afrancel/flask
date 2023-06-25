@@ -115,18 +115,7 @@ def admin_medicos_borrar():
 
     return redirect('/admin/medicos') #--> redirecciona a la pagina de listado, es decir, medicos
 
-#BORRAR REGISTRO DEL SERVIDOR SIN IMAGEN-->
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
-    cursor.execute("SELECT medico FROM medicos WHERE id = %s;", (_medico_id_borrar))
-    medicos = cursor.fetchall()
-    conexion.commit()
-    print(medicos)
 
-#BORRAR IMAGEN DEL REGISTRO-->
-    #si existe esta imagen, con el click se borra la imagn directo del servidor
-    if os.path.exists("templates/imagenes/"+str(imagenNueva[0][0])):
-        os.unlink("templates/imagenes/"+str(imagenNueva[0][0]))
 
 #************** Instanciamos ********#
 if __name__ == '__main__':
