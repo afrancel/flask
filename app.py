@@ -3,6 +3,7 @@ from flask import Flask #importamos la libreria
 from flask import render_template #importamos el lector de plantillas
 from flask import request, redirect #importamos para hacer solicitudes y redirecciones
 from flaskext.mysql import MySQL #importamos para gestión de BD (Esta es una extensión)
+from datetime import datetime #para generar variables de tiempo y trabajar con carga de archivos
 
 #creamos la app. Si ejecutamos este archivo, sera 'main', pero desde otro archivo será 'holamundo.py'
 app = Flask(__name__)
@@ -37,9 +38,15 @@ def admin_index(): #definimos una función llamada index
 
 @app.route('/admin/medicos')
 def admin_medicos():
-    conexion = mysql.connect()
-    print(conexion)
-    return render_template('/admin/medicos.html')
+
+    conexion = mysql.connect() #--> conexion inicial de la hoja
+    cursor = conexion.cursor() #--> conexion sistema/BD
+    cursor.execute("SELECT * FROM medicos;") # --> Selección con cursor la tabla / ojo revisión de nuevo comillas
+    lista_medicos = cursor.fetchall()  #--> Ejecuto la sección en la BD
+    conexion.commit()  #--> comento como siempre
+    print(medicos) #--> imprimo lo solicitado / cambié de print(conexion) porque se cambió toda la conexión
+
+    return render_template('/admin/medicos.html',medicos=lista_medicos) #--> Conectamos listado con la hoja
 
 @app.route('/admin/nosotros')
 def admin_nosotros():
@@ -61,7 +68,16 @@ def admin_medicos_guardar():
     #01 instrucción SQL con ayuda de workbench
     sql = "INSERT INTO medicos (id, nombre, url, imagen) VALUES (NULL,%s,%s,%s);"
     values = (_nombre,_url_linkedin,_imagen.filename)
-    
+
+    #configuración carga y muestra de imagenes
+    #Para esto --> importamos from datetime import datetime
+    fecha_carga = datetime.now()
+    fecha_actual = fecha_carga.strftime('%Y_%H_%M_%S')#--> para mostrar, traer los datos en un formato
+
+    if _imagen.filename!= '':
+        nuevoNombre = fecha_actual + ' ' + _imagen.filename
+        _imagen.save("templates/imagenes/" + nuevoNombre)
+
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute(sql,values)
@@ -72,6 +88,29 @@ def admin_medicos_guardar():
     print(_imagen)
 
     return redirect('/admin/medicos')
+
+@app.route('/admin/medicos/borrar', methods = ['POST'])
+def admin_medicos_borrar():
+
+    _medico_id_borrar = request.form['medico_id_borrar']
+
+#<!-- este bloque sería solo para borrar -->
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("DELETE FROM medicos WHERE id = %s;", (_medico_id_borrar))
+    conexion.commit()
+
+#<!-- este bloque sería solo para consultar -->
+#    conexion = mysql.connect()
+#    cursor = conexion.cursor()
+#    cursor.execute("SELECT * FROM medicos WHERE id = %s;", (_medico_id_borrar))
+#    medicos = cursor.fetchall()
+#    conexion.commit()
+#    print(medicos)
+#<!-- este bloque sería solo para consultar -->
+
+    return redirect('/admin/medicos') #--> redirecciona a la pagina de listado, es decir, medicos
+
 
 #************** Instanciamos ********#
 if __name__ == '__main__':

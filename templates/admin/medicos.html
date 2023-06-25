@@ -28,6 +28,13 @@
             </div>
         </div>          
         </div>
+
+        <!--  Venimos desde app.py desde esta funcion:
+              @app.route('/admin/medicos')
+              def admin_medicos():
+              Ahora vamos a mostar la data seleccionada
+        -->
+
         <div class="col-8"> 
           <div class="table-responsive">
             <table class="table table-primary">
@@ -41,20 +48,23 @@
                 </tr>
               </thead>
               <tbody>
+                  
+                {%for medico in medicos%}
                 <tr class="">
-                  <td>01</td>
-                  <td>Yessica Acero</td>
-                  <td>Ginecóloga</td>
-                  <td>Imagen.jpg</td>
-                  <td>Modificar</td>
+                  <td>{{ medico[0] }}</td>
+                  <td>{{ medico[1] }}</td>
+                  <td>{{ medico[2] }}</td>
+                  <td>{{ medico[3] }}</td>
+                  <td>
+
+                    <form action="/admin/medicos/borrar" method="post">
+                      <input type="text" value="{{ medico[0] }}" name="medico_id_borrar" id="medico_id_borrar">
+                      <button type="submit" class="btn btn-primary">Eliminar</button>
+                    </form>
+
+                  </td>
                 </tr>
-                <tr class="">
-                  <td scope="row">Item</td>
-                  <td>Item</td>
-                  <td>Item</td>
-                  <td>Item</td>
-                  <td>Item</td>                  
-                </tr>
+                {% endfor %}
               </tbody>
             </table>
           </div>
