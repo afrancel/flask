@@ -44,6 +44,7 @@ def nosotros():
 def admin_index(): #definimos una función llamada index
     return render_template('/admin/index.html') #indicamos la ruta
 
+#CONEXION A BASE DATOS
 @app.route('/admin/medicos')
 def admin_medicos():
 
@@ -67,24 +68,27 @@ def admin_login():
 @app.route('/admin/medicos/guardar',methods=['POST']) #ruta para el request del form de medicos
 def admin_medicos_guardar():
 
+#CAPTURAR DATOS DEL FORM SIN IMAGEN
     #creo estas variables, que tomarán la info del form de la página e indica que campo del form tomará
     _nombre = request.form['medico_nombre_form']
     _url_linkedin = request.form['medico_url_form']
     _imagen = request.files['medico_imagen_form']
 
+#SUBIR IMAGEN DEL FORM
     #configuración carga y muestra de imagenes
     #Para esto --> importamos from datetime import datetime
     fecha_carga = datetime.now()
     fecha_actual = fecha_carga.strftime('%Y%H%M%S')#--> para mostrar, traer los datos en un formato
 
     if _imagen.filename!= "":
-        nuevoNombre = fecha_actual+"_"+ _imagen.filename
-        _imagen.save("templates/imagenes/"+nuevoNombre)    
+        imagenNueva = fecha_actual+"_"+ _imagen.filename
+        _imagen.save("templates/imagenes/"+imagenNueva)    
 
+#INSERTAR IMAGEN DEL FORM EN BD
     #creo esta variable, para insertar los datos anteriores en la bd
     #01 instrucción SQL con ayuda de workbench
     sql = "INSERT INTO medicos (id, nombre, url, imagen) VALUES (NULL,%s,%s,%s);"
-    values = (_nombre,_url_linkedin,nuevoNombre) #--> la variable de la imagen cambió
+    values = (_nombre,_url_linkedin,imagenNueva) #--> la variable de la imagen cambió
 
     conexion = mysql.connect()
     cursor = conexion.cursor()
@@ -102,23 +106,27 @@ def admin_medicos_borrar():
 
     _medico_id_borrar = request.form['medico_id_borrar']
 
-#<!-- este bloque sería solo para borrar -->
+#BORRAR REGISTRO DE LA BASE DE DATOS
+#<!-- este bloque para borrar la info -->
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute("DELETE FROM medicos WHERE id = %s;", (_medico_id_borrar))
     conexion.commit()
 
-#<!-- este bloque sería solo para consultar -->
-#    conexion = mysql.connect()
-#    cursor = conexion.cursor()
-#    cursor.execute("SELECT * FROM medicos WHERE id = %s;", (_medico_id_borrar))
-#    medicos = cursor.fetchall()
-#    conexion.commit()
-#    print(medicos)
-#<!-- este bloque sería solo para consultar -->
-
     return redirect('/admin/medicos') #--> redirecciona a la pagina de listado, es decir, medicos
 
+#BORRAR REGISTRO DEL SERVIDOR SIN IMAGEN-->
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT medico FROM medicos WHERE id = %s;", (_medico_id_borrar))
+    medicos = cursor.fetchall()
+    conexion.commit()
+    print(medicos)
+
+#BORRAR IMAGEN DEL REGISTRO-->
+    #si existe esta imagen, con el click se borra la imagn directo del servidor
+    if os.path.exists("templates/imagenes/"+str(imagenNueva[0][0])):
+        os.unlink("templates/imagenes/"+str(imagenNueva[0][0]))
 
 #************** Instanciamos ********#
 if __name__ == '__main__':
