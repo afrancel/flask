@@ -32,10 +32,16 @@ mysql.init_app(app)
 def index(): #definimos una función llamada index
     return render_template('sitio/index.html') #indicamos la ruta
 
+#configuracion para la ruta de las imagenes y que puedan verse
 @app.route('/imagenes/<imagen>')
 def cargar_imagen(imagen):
     print(imagen)
     return send_from_directory(os.path.join('templates/imagenes/'),imagen)
+
+#ruta para archivos css
+@app.route('/css/<archivocsss>')
+def cargar_css(archivocss):
+    return send_from_directory(os.path.join('/templates/sitio/css/'),archivocss)
 
 @app.route('/medicos')
 def medicos():
@@ -56,11 +62,19 @@ def nosotros():
 
 @app.route('/admin/') #método para indicar la ruta, se ejecutara cuando llamemos la raíz
 def admin_index(): #definimos una función llamada index
+
+    if not 'login' in session:
+        return  redirect('/admin/login')
+
     return render_template('/admin/index.html') #indicamos la ruta
 
 #CONEXION A BASE DATOS
 @app.route('/admin/medicos')
 def admin_medicos():
+
+    #verifico si existe la sesion para dejar ingresar
+    if not 'login' in session:
+        return redirect('/admin/login')
 
     conexion = mysql.connect() #--> conexion inicial de la hoja
     cursor = conexion.cursor() #--> conexion sistema/BD
@@ -73,6 +87,10 @@ def admin_medicos():
 
 @app.route('/admin/nosotros')
 def admin_nosotros():
+
+    if not 'login' in session:
+        return redirect('/admin/login')
+
     return render_template('/admin/nosotros.html')
 
 @app.route('/admin/login')
@@ -100,12 +118,13 @@ def admin_login_cerrar():
     session.clear()
     return redirect('/admin/login')
 
-#ruta para el request del form de medicos
+#CAPTURAR DATOS DEL FORM SIN IMAGEN
 @app.route('/admin/medicos/guardar',methods=['POST'])
 def admin_medicos_guardar():
 
-#CAPTURAR DATOS DEL FORM SIN IMAGEN
-
+    if not 'login' in session:
+        return  redirect('/admin/login')
+    
     #creo estas variables, que tomarán la info del form de la página e indica que campo del form tomará
     _nombre = request.form['medico_nombre_form']
     _url_linkedin = request.form['medico_url_form']
@@ -143,8 +162,10 @@ def admin_medicos_guardar():
 @app.route('/admin/medicos/borrar', methods = ['POST'])
 def admin_medicos_borrar():
 
+    if not 'login' in session:
+        return redirect('/admin/login')
+    
     _medico_id_borrar = request.form['medico_id_borrar']
-
 
 #BORRAR REGISTRO DEL SERVIDOR SIN IMAGEN-->
     conexion = mysql.connect()
