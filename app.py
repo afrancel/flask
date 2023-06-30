@@ -39,9 +39,10 @@ def cargar_imagen(imagen):
     return send_from_directory(os.path.join('templates/imagenes/'),imagen)
 
 #ruta para archivos css
-@app.route('/css/<archivocsss>')
+@app.route('/css/<archivocss>')
 def cargar_css(archivocss):
-    return send_from_directory(os.path.join('/templates/sitio/css/'),archivocss)
+    print(archivocss)
+    return send_from_directory(os.path.join('/templates/css/'),archivocss)
 
 @app.route('/medicos')
 def medicos():
