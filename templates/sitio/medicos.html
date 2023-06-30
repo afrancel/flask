@@ -9,33 +9,17 @@
 
   <!-- Información Doctor -->
     <div class="row">
+      {% for medico in medicos %}
         <div class="col-4">
             <div class="card text-start">
-              <img class="card-img-top" src="https://www.cleversalud.cl/wp-content/uploads/Posso-Moar-Ana-CleverSalud-Gineco-Obstetra.jpg" alt="Title">
+              <img class="card-img-top" src="/imagenes/{{ medico[3] }}" alt="Title">
               <div class="card-body">
-                <h4 class="card-title">Title</h4>
-                <p class="card-text">Body</p>
+                <h4 class="card-title">{{ medico[1] }}</h4>
+                <p class="card-text">{{ medico[2] }}</p>
               </div>
             </div>
         </div>
-        <div class="col-4">
-            <div class="card text-start">
-                <img class="card-img-top" src="https://www.cleversalud.cl/wp-content/uploads/Posso-Moar-Ana-CleverSalud-Gineco-Obstetra.jpg" alt="Title">
-                <div class="card-body">
-                  <h4 class="card-title">Title</h4>
-                  <p class="card-text">Body</p>
-                </div>
-              </div>
-        </div>
-        <div class="col-4">
-            <div class="card text-start">
-                <img class="card-img-top" src="https://www.cleversalud.cl/wp-content/uploads/Posso-Moar-Ana-CleverSalud-Gineco-Obstetra.jpg" alt="Title">
-                <div class="card-body">
-                  <h4 class="card-title">Title</h4>
-                  <p class="card-text">Body</p>
-                </div>
-              </div>
-        </div>        
+        {% endfor %}
     </div>
 
 
